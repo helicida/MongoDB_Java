@@ -127,17 +127,24 @@ public class MongoDBJDBC {
 		System.out.println("Introduce el numero de heridos en el conflicto (int)");
 			int heridos = teclat.nextInt();
 
-		System.out.println("Introduce la id del grupo armado que le quieras insertar (int)");
-			int grupoArmado = teclat.nextInt();
+		System.out.println("Introduce el nombre del grupo armado que le quieras insertar (int)");
+			String grupoArmado = teclat.next();
 
-		// Consideramos grupoArmado como un hash con claves predefinidas y valores dados por el usuario
+		// Buscamos en la colección por el nombre introducido por el usuario
+		FindIterable<Document> cursor = colleccion.find(new BasicDBObject("nombre", grupoArmado));
+
+		// Consideramos conflicto como un hash con claves predefinidas y valores dados por el usuario
 		Map<String, Object> conflicto = new HashMap<>();
 
 		conflicto.put("_id", codigo);
 		conflicto.put("nombre", nombre);
 		conflicto.put("zona", zona);
 		conflicto.put("heridos", heridos);
-		conflicto.put("gArmados", Arrays.asList(grupoArmado));
+
+		// Buscamos el grupoArmado que queremos vincular y lo insertamos
+		for (Document document : cursor) {
+			conflicto.put("gArmados", Arrays.asList(document.toJson().toString()));
+		}
 
 		// Insertamos en la BBDD
 		colleccion.insertOne(new Document(conflicto));
