@@ -124,8 +124,11 @@ public class MongoDBJDBC {
 		System.out.println("Introduce las zona del conflicto (String)");
 			String zona = teclat.next();
 
-		System.out.println("Introduce el numero de heridos en el conflicto (String)");
+		System.out.println("Introduce el numero de heridos en el conflicto (int)");
 			int heridos = teclat.nextInt();
+
+		System.out.println("Introduce la id del grupo armado que le quieras insertar (int)");
+			int grupoArmado = teclat.nextInt();
 
 		// Consideramos grupoArmado como un hash con claves predefinidas y valores dados por el usuario
 		Map<String, Object> conflicto = new HashMap<>();
@@ -134,7 +137,7 @@ public class MongoDBJDBC {
 		conflicto.put("nombre", nombre);
 		conflicto.put("zona", zona);
 		conflicto.put("heridos", heridos);
-		conflicto.put("gArmados", Arrays.asList(codigo));
+		conflicto.put("gArmados", Arrays.asList(grupoArmado));
 
 		// Insertamos en la BBDD
 		colleccion.insertOne(new Document(conflicto));
